@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Village Complaint Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
+    <h1 class="text-2xl font-bold text-center mb-4">Complaint Tracker</h1>
+
+    <!-- Complaint Submission Form -->
+    <form id="complaintForm" class="space-y-4">
+      <div>
+        <label class="block font-medium">Name:</label>
+        <input type="text" name="name" required class="w-full p-2 border rounded" />
+      </div>
+    <div>
+    <label class="block font-medium">street:</label>
+    <input type="tel" name="street" requried patter="[0-4]{4}" class="w-full p-2 border rounded"/>
+    </div>
+      <div>
+        <label class="block font-medium">Mobile Number:</label>
+        <input type="tel" name="mobile" required pattern="[0-9]{10}" class="w-full p-2 border rounded" />
+      </div>
+      <div>
+        <label class="block font-medium">Complaint Type:</label>
+        <select name="type" required class="w-full p-2 border rounded">
+          <option value="Water Supply">Water Supply</option>
+          <option value="Streetlight">Streetlight</option>
+          <option value="Road Damage">Road Damage</option>
+          <option value="Electricity Disconnection">Electricity Disconnection</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-medium">Description:</label>
+        <textarea name="description" rows="4" required class="w-full p-2 border rounded"></textarea>
+      </div>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit Complaint</button>
+    </form>
+
+    <!-- Success Message -->
+    <div id="responseMsg" class="mt-4 text-green-600 hidden">Complaint submitted and saved locally!</div>
+  </div>
+
+  <!-- JavaScript to Save to localStorage -->
+  <script>
+    document.getElementById('complaintForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const complaint = Object.fromEntries(formData.entries());
+      complaint.timestamp = new Date().toISOString();
+
+      // Get existing complaints or initialize empty array
+      const savedComplaints = JSON.parse(localStorage.getItem('complaints')) || [];
+
+      // Add the new complaint
+      savedComplaints.push(complaint);
+
+      // Save updated array back to localStorage
+      localStorage.setItem('complaints', JSON.stringify(savedComplaints));
+
+      // Show success message and reset form
+      document.getElementById('responseMsg').classList.remove('hidden');
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
+
